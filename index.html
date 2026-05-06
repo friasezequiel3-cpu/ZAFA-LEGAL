@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zafá Legal — Asistente Jurídico para Cooperativas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #1e2530;
+  --bg2: #242d3a;
+  --bg3: #2a3545;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --green: #4eca82;
+  --green2: #3ab872;
+  --green3: #2da060;
+  --green-glow: rgba(78,202,130,0.15);
+  --green-dim: rgba(78,202,130,0.08);
+  --text: #f0f4f8;
+  --text2: #8fa3b8;
+  --text3: #5a7290;
+  --white: #ffffff;
+  --radius: 12px;
+  --radius-lg: 18px;
+  --shadow: 0 8px 32px rgba(0,0,0,0.35);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Instrument Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── NOISE TEXTURE OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+}
+
+/* ── HEADER ── */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(30,37,48,0.92);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+/* SVG SHIELD LOGO */
+.shield-icon {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+}
+
+.logo-text {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 20px;
+  letter-spacing: -0.3px;
+  color: var(--white);
+}
+
+.logo-text span { color: var(--green); }
+
+.header-badge {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--green);
+  background: var(--green-dim);
+  border: 1px solid rgba(78,202,130,0.25);
+  padding: 4px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ── HERO ── */
+.hero {
+  position: relative;
+  z-index: 1;
+  padding: 5rem 2rem 3.5rem;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.hero-glow {
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 600px; height: 300px;
+  background: radial-gradient(ellipse at center, rgba(78,202,130,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: var(--green);
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hero-eyebrow::before, .hero-eyebrow::after {
+  content: '';
+  width: 24px; height: 1px;
+  background: var(--green);
+  opacity: 0.5;
+}
+
+.hero h1 {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  line-height: 1.1;
+  letter-spacing: -1px;
+  color: var(--white);
+  margin-bottom: 1.25rem;
+}
+
+.hero h1 em {
+  font-style: normal;
+  color: var(--green);
+}
+
+.hero p {
+  font-size: 16px;
+  color: var(--text2);
+  line-height: 1.7;
+  max-width: 560px;
+  margin: 0 auto 2rem;
+}
+
+.hero-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+}
+
+.tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  color: var(--text2);
+  letter-spacing: 0.05em;
+}
+
+/* ── MAIN APP ── */
+.app {
+  position: relative;
+  z-index: 1;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 1.25rem 4rem;
+}
+
+/* ── TABS NAV ── */
+.tabs-nav {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  margin-bottom: 1.5rem;
+  scrollbar-width: none;
+}
+.tabs-nav::-webkit-scrollbar { display: none; }
+
+.tab-btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 15px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text3);
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.18s;
+  white-space: nowrap;
+}
+
+.tab-btn:hover {
+  background: var(--bg3);
+  color: var(--text2);
+  border-color: var(--border2);
+}
+
+.tab-btn.active {
+  background: var(--green-dim);
+  border-color: rgba(78,202,130,0.4);
+  color: var(--green);
+}
+
+.tab-btn svg { width: 14px; height: 14px; opacity: 0.8; }
+
+/* ── PANELS ── */
+.panel { display: none; }
+.panel.active { display: block; animation: fadeUp 0.25s ease; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── CARD ── */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.card-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--white);
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-title svg { width: 16px; height: 16px; color: var(--green); }
+
+/* ── FORM ELEMENTS ── */
+.field { margin-bottom: 1rem; }
+
+label {
+  display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 5px;
+}
+
+input, select, textarea {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 13px;
+  color: var(--text);
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 13.5px;
+  outline: none;
+  transition: border-color 0.18s, box-shadow 0.18s;
+  -webkit-appearance: none;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: rgba(78,202,130,0.5);
+  box-shadow: 0 0 0 3px var(--green-glow);
+}
+
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235a7290' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+  cursor: pointer;
+}
+
+select option { background: var(--bg2); }
+
+textarea {
+  resize: vertical;
+  min-height: 90px;
+  line-height: 1.6;
+}
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+/* ── SECTION DIVIDER ── */
+.sec-divider {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--green);
+  margin: 1.25rem 0 0.75rem;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(78,202,130,0.15);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── CARGO ROWS ── */
+.cargo-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 8px;
+  margin-bottom: 8px;
+  align-items: center;
+}
+
+.rm-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text3);
+  width: 32px; height: 32px;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+.rm-btn:hover { border-color: #e05555; color: #e05555; }
+
+.add-btn {
+  width: 100%;
+  background: transparent;
+  border: 1px dashed var(--border2);
+  border-radius: var(--radius);
+  color: var(--green);
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 12.5px;
+  padding: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-bottom: 0.75rem;
+}
+.add-btn:hover { background: var(--green-dim); border-color: rgba(78,202,130,0.4); }
+
+/* ── SUBMIT BUTTON ── */
+.btn-submit {
+  width: 100%;
+  padding: 13px;
+  background: linear-gradient(135deg, var(--green2), var(--green3));
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius);
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 0.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-submit::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.btn-submit:hover::before { opacity: 1; }
+.btn-submit:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(78,202,130,0.3); }
+.btn-submit:active { transform: translateY(0); }
+.btn-submit:disabled {
+  background: var(--bg3);
+  color: var(--text3);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ── SPINNER ── */
+.spin {
+  display: inline-block;
+  width: 14px; height: 14px;
+  border: 2px solid rgba(255,255,255,0.25);
+  border-top-color: var(--white);
+  border-radius: 50%;
+  animation: rot 0.7s linear infinite;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+@keyframes rot { to { transform: rotate(360deg); } }
+
+/* ── RESULT BOX ── */
+.result-box {
+  display: none;
+  margin-top: 1.25rem;
+  background: var(--bg);
+  border: 1px solid rgba(78,202,130,0.2);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  animation: fadeUp 0.3s ease;
+}
+.result-box.on { display: block; }
+
+.result-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: rgba(78,202,130,0.06);
+  border-bottom: 1px solid rgba(78,202,130,0.12);
+}
+
+.result-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--green);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.result-label::before {
+  content: '';
+  width: 6px; height: 6px;
+  background: var(--green);
+  border-radius: 50%;
+  animation: pulse 2s ease infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.copy-btn {
+  background: transparent;
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 4px 11px;
+  font-size: 11px;
+  color: var(--text2);
+  cursor: pointer;
+  font-family: 'Instrument Sans', sans-serif;
+  transition: all 0.15s;
+}
+.copy-btn:hover { background: var(--bg3); color: var(--text); }
+
+.result-body {
+  padding: 1.25rem 1.5rem;
+  font-size: 13px;
+  line-height: 1.85;
+  color: var(--text2);
+  white-space: pre-wrap;
+  font-family: 'Instrument Sans', sans-serif;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.result-body::-webkit-scrollbar { width: 4px; }
+.result-body::-webkit-scrollbar-track { background: transparent; }
+.result-body::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+/* ── FOOTER ── */
+footer {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid var(--border);
+  padding: 2rem;
+  text-align: center;
+  color: var(--text3);
+  font-size: 12px;
+  font-family: 'DM Mono', monospace;
+}
+
+footer strong { color: var(--green); }
+
+/* ── DISCLAIMER ── */
+.disclaimer {
+  background: rgba(78,202,130,0.04);
+  border: 1px solid rgba(78,202,130,0.12);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  font-size: 11.5px;
+  color: var(--text3);
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+/* ── MOBILE ── */
+@media (max-width: 600px) {
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  .hero { padding: 3rem 1.25rem 2rem; }
+  .card { padding: 1.25rem; }
+  .cargo-row { grid-template-columns: 1fr 1fr auto; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <a class="logo-wrap" href="#">
+    <!-- Shield + Check SVG replicando el logo -->
+    <svg class="shield-icon" viewBox="0 0 48 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M24 2L4 10V26C4 37.05 12.8 47.35 24 50C35.2 47.35 44 37.05 44 26V10L24 2Z"
+            stroke="#4eca82" stroke-width="3" fill="none" stroke-linejoin="round"/>
+      <polyline points="14,26 21,33 34,19" stroke="white" stroke-width="3.5"
+                stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div class="logo-text"><span>ZAFÁ</span> LEGAL</div>
+  </a>
+  <div class="header-badge">IA · Ley 20.337 · INAES</div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-eyebrow">Asistente Jurídico para Cooperativas</div>
+  <h1>Tu abogado especialista<br>en <em>cooperativas</em> siempre disponible</h1>
+  <p>Redacción de actas, poderes y análisis de contratos con dominio de la Ley 20.337, resoluciones del INAES y normativa de los órganos de contralor provinciales.</p>
+  <div class="hero-tags">
+    <span class="tag">Ley 20.337</span>
+    <span class="tag">INAES</span>
+    <span class="tag">Ley 24.013</span>
+    <span class="tag">SECLO · MEPRE</span>
+    <span class="tag">Ley 26.589</span>
+    <span class="tag">Código Civil y Comercial</span>
+    <span class="tag">Contralores Provinciales</span>
+  </div>
+</section>
+
+<!-- MAIN APP -->
+<main class="app">
+
+  <div class="disclaimer">
+    ⚖️ Los documentos generados tienen carácter orientativo y deben ser revisados por un profesional habilitado antes de su uso oficial. Este asistente no reemplaza el asesoramiento jurídico personalizado.
+  </div>
+
+  <!-- TABS -->
+  <nav class="tabs-nav">
+    <button class="tab-btn active" onclick="sw('asamblea', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Acta Asamblea
+    </button>
+    <button class="tab-btn" onclick="sw('consejo', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+      Acta Consejo
+    </button>
+    <button class="tab-btn" onclick="sw('cargos', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0 1 12 0v2"/><path d="M19 11l2 2-4 4"/></svg>
+      Distribución Cargos
+    </button>
+    <button class="tab-btn" onclick="sw('alta', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+      Alta Asociado
+    </button>
+    <button class="tab-btn" onclick="sw('baja', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+      Baja Asociado
+    </button>
+    <button class="tab-btn" onclick="sw('poder', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+      Poder
+    </button>
+    <button class="tab-btn" onclick="sw('autorizacion', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      Autorización Contrato
+    </button>
+    <button class="tab-btn" onclick="sw('analisis', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      Analizar Contrato
+    </button>
+    <button class="tab-btn" onclick="sw('consulta', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      Consulta Legal
+    </button>
+  </nav>
+
+  <!-- ═══════════════ PANEL ASAMBLEA ═══════════════ -->
+  <div class="panel active" id="panel-asamblea">
+    <div class="card">
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>
+        Acta de Asamblea
+      </div>
+      <div class="grid-2">
+        <div class="field"><label>Tipo de asamblea</label>
+          <select id="a-tipo">
+            <option>Asamblea General Ordinaria</option>
+            <option>Asamblea General Extraordinaria</option>
+            <option>Asamblea de Delegados</option>
+            <option>Asamblea Constitutiva</option>
+          </select>
+        </div>
+        <div class="field"><label>Fecha</label><input type="date" id="a-fecha"></div>
+      </div>
+      <div class="field"><label>Nombre de la cooperativa</label><input id="a-coop" placeholder="Cooperativa de Trabajo ... Ltda."></div>
+      <div class="grid-3">
+        <div class="field"><label>Lugar</label><input id="a-lugar" placeholder="Ciudad / Sede social"></div>
+        <div class="field"><label>Hora inicio</label><input type="time" id="a-hora"></div>
+        <div class="field"><label>N° de Acta</label><input id="a-nro" placeholder="Ej: 48"></div>
+      </div>
+      <div class="field"><label>Quórum / Asociados presentes</label><input id="a-quorum" placeholder="Ej: 24 sobre 40 habilitados"></div>
+      <div class="field"><label>Orden del día</label>
+        <textarea id="a-orden" placeholder="1. Apertura&#10;2. Lectura del acta anterior&#10;3. Consideración de memoria y balance&#10;4. Elección de autoridades&#10;5. Varios"></textarea>
+      </div>
+      <div class="field"><label>Resoluciones y deliberaciones</label>
+        <textarea id="a-resoluciones" style="min-height:110px" placeholder="Describa los temas tratados, debates y resoluciones adoptadas en cada punto del orden del día..."></textarea>
+      </div>
+      <div class="grid-2">
+        <div class="field"><label>Presidente de mesa</label><input id="a-pres" placeholder="Apellido, Nombre"></div>
+        <div class="field"><label>Secretario de mesa</label><input id="a-sec" placeholder="Apellido, Nombre"></div>
+      </div>
+      <button class="btn-submit" id="btn-asamblea" onclick="gen('asamblea')">Redactar Acta de Asamblea</button>
+      <div class="result-box" id="res-asamblea">
+        <div class="result-header">
+          <span class="result-label">Acta generada</span>
+          <button class="copy-btn" onclick="cp('body-asamblea')">Copiar texto</button>
+        </div>
+        <div class="result-body" id="body-asamblea"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ PANEL CONSEJO ═══════════════ -->
+  <div class="panel" id="panel-consejo">
+    <div class="card">
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        Acta del Consejo de Administración
+      </div>
+      <div class="grid-2">
+        <div class="field"><label>Tipo de reunión</label>
+          <select id="c-tipo">
+            <option>Reunión Ordinaria del Consejo de Administración</option>
+            <option>Reunión Extraordinaria del Consejo de Administración</option>
+          </select>
+        </div>
+        <div class="field"><label>Fecha</label><input type="date" id="c-fecha"></div>
+      </div>
+      <div class="field"><label>Nombre de la cooperativa</label><input id="c-coop" placeholder="Cooperativa de Trabajo ... Ltda."></div>
+      <div class="grid-3">
+        <div class="field"><label>Lugar</label><input id="c-lugar" placeholder="Sede social"></div>
+        <div class="field"><label>Hora</label><input type="time" id="c-hora"></div>
+        <div class="field"><label>N° de Acta</label><input id="c-nro" placeholder="Ej: 87"></div>
+      </div>
+      <div class="field"><label>Consejeros presentes</label>
+        <textarea id="c-consejeros" style="min-height:65px" placeholder="Ej: Juan Pérez (Presidente), María López (Secretaria), Carlos Ruiz (Tesorero)..."></textarea>
+      </div>
+      <div class="field"><label>Orden del día</label>
+        <textarea id="c-orden" placeholder="1. Verificación quórum&#10;2. Temas a tratar&#10;3. Varios"></textarea>
+      </div>
+      <div class="field"><label>Temas tratados y resoluciones</label>
+        <textarea id="c-resoluciones" style="min-height:110px" placeholder="Describa los temas tratados, debates y resoluciones adoptadas por el Consejo..."></textarea>
+      </div>
+      <button class="btn-submit" id="btn-consejo" onclick="gen('consejo')">Redactar Acta del Consejo</button>
+      <div class="result-box" id="res-consejo">
+        <div class="result-header"><span class="result-label">Acta del consejo</span><button class="copy-btn" onclick="cp('body-consejo')">Copiar texto</button></div>
+        <div class="result-body" id="body-consejo"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ PANEL CARGOS ═══════════════ -->
+  <div class="panel" id="panel-cargos">
+    <div class="card">
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0 1 12 0v2"/></svg>
+        Distribución de Cargos del Consejo
+      </div>
+      <div class="grid-2">
+        <div class="field"><label>Fecha de la reunión</label><input type="date" id="car-fecha"></div>
+        <div class="field"><label>Período</label><input id="car-periodo" placeholder="Ej: 2024 – 2026"></div>
+      </div>
+      <div class="field"><label>Nombre de la cooperativa</label><input id="car-coop" placeholder="Cooperativa de Trabajo ... Ltda."></div>
+
+      <div class="sec-divider">Consejo de Administración</div>
+      <div id="cargos-ca">
+        <div class="cargo-row"><input placeholder="Cargo" style="font-size:13px"><input placeholder="Nombre y apellido completo" style="font-size:13px"><button class="rm-btn" onclick="this.parentElement.remove()">×</button></div>
+        <div class="cargo-row"><input placeholder="Cargo" style="font-size:13px"><input placeholder="Nombre y apellido completo" style="font-size:13px"><button class="rm-btn" onclick="this.parentElement.remove()">×</button></div>
+        <div class="cargo-row"><input placeholder="Cargo" style="font-size:13px"><input placeholder="Nombre y apellido completo" style="font-size:13px"><button class="rm-btn" onclick="this.parentElement.remove()">×</button></div>
+        <div class="cargo-row"><input placeholder="Cargo" style="font-size:13px"><input placeholder="Nombre y apellido completo" style="font-size:13px"><button class="rm-btn" onclick="this.parentElement.remove()">×</button></div>
+      </div>
+      <button class="add-btn" onclick="addRow('cargos-ca')">+ Agregar consejero</button>
+
+      <div class="sec-divider">Sindicatura / Revisores de Cuentas</div>
+      <div id="cargos-sind">
+        <div class="cargo-row"><input placeholder="Cargo" style="font-size:13px"><input placeholder="Nombre y apellido completo" style="font-size:13px"><button class="rm-btn" onclick="this.parentElement.remove()">×</button></div>
+      </div>
+      <button class="add-btn" onclick="addRow('cargos-sind')">+ Agregar síndico</button>
+
+      <div class="field"><label>Observaciones</label><textarea id="car-obs" style="min-height:60px" placeholder="Ej: todos los cargos aceptados por unanimidad..."></textarea></div>
+      <button class="btn-submit" id="btn-cargos" onclick="gen('cargos')">Redactar Acta de Distribución de Cargos</button>
+      <div class="result-box" id="res-cargos">
+        <div class="result-header"><span class="result-label">Distribución de cargos</span><button class="copy-btn" onclick="cp('body-cargos')">Copiar texto</button></div>
+        <div class="result-body" id="body-cargos"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ PANEL ALTA ═══════════════ -->
+  <div class="panel" id="panel-alta">
+    <div class="card">
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+        Alta de Asociado
+      </div>
+      <div class="field"><label>Nombre de la cooperativa</label><input id="al-coop" placeholder="Cooperativa de Trabajo ... Ltda."></div>
+      <div class="grid-2">
+        <div class="field"><label>Fecha de la reunión</label><input type="date" id="al-fecha"></div>
+        <div class="field"><label>N° de Acta</label><input id="al-nro" placeholder="Ej: 125"></div>
+      </div>
+      <div class="sec-divider">Datos del nuevo asociado</div>
+      <div class="grid-2">
+        <div class="field"><label>Apellido y nombre</label><input id="al-nombre" placeholder="Apellido, Nombre"></div>
+        <div class="field"><label>DNI</label><input id="al-dni" placeholder="XX.XXX.XXX"></div>
+      </div>
+      <div class="grid-2">
+        <div class="field"><label>Domicilio</label><input id="al-domicilio" placeholder="Calle, número, ciudad"></div>
+        <div class="field"><label>Fecha de nacimiento</label><input type="date" id="al-nacimiento"></div>
+      </div>
+      <div class="grid-2">
+        <div class="field"><label>Cuota social a integrar</label><input id="al-cuota" placeholder="Ej: $5.000"></div>
+        <div class="field"><label>Sección / Área</label><input id="al-sector" placeholder="Ej: producción, logística"></div>
+      </div>
+      <div class="field"><label>N° de registro en libro de asociados</label><input id="al-registro" placeholder="Ej: 58"></div>
+      <div class="field"><label>Observaciones</label><textarea id="al-obs" style="min-height:60px" placeholder="Antecedentes, condiciones especiales, etc."></textarea></div>
+      <button class="btn-submit" id="btn-alta" onclick="gen('alta')">Redactar Acta de Alta de Asociado</button>
+      <div class="result-box" id="res-alta">
+        <div class="result-header"><span class="result-label">Alta de asociado</span><button class="copy-btn" onclick="cp('body-alta')">Copiar texto</button></div>
+        <div class="result-body" id="body-alta"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ PANEL BAJA ═══════════════ -->
+  <div class="panel" id="panel-baja">
+    <div class="card">
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+        Baja de Asociado
+      </div>
+      <div class="field"><label>Nombre de la cooperativa</label><input id="ba-coop" placeholder="Cooperativa de Trabajo ... Ltda."></div>
+      <div class="grid-2">
+        <div class="field"><label>Fecha de la reunión</label><input type="date" id="ba-fecha"></div>
+        <div class="field"><label>N° de Acta</label><input id="ba-nro" placeholder="Ej: 126"></div>
+      </div>
+      <div class="sec-divider">Datos del asociado</div>
+      <div class="grid-2">
+        <div class="field"><label>Apellido y nombre</label><input id="ba-nombre" placeholder="Apellido, Nombre"></div>
+        <div class="field"><label>DNI</label><input id="ba-dni" placeholder="XX.XXX.XXX"></div>
+      </div>
+      <div class="grid-2">
+        <div class="field"><label>Fecha de ingreso</label><input type="date" id="ba-ingreso"></div>
+        <div class="field"><label>Fecha efectiva de baja</label><input type="date" id="ba-egreso"></div>
+      </div>
+      <div class="field"><label>Motivo de baja</label>
+        <select id="ba-motivo">
+          <option value="renuncia voluntaria del asociado">Renuncia voluntaria del asociado</option>
+          <option value="exclusión por incumplimiento estatutario">Exclusión por incumplimiento estatutario</option>
+          <option value="exclusión por mora en el pago de cuotas sociales">Exclusión por mora en cuotas sociales</option>
+          <option value="fallecimiento del asociado">Fallecimiento</option>
+          <option value="disolución de sección">Disolución de sección</option>
+          <option value="acuerdo entre las partes">Acuerdo entre partes</option>
+          <option value="otro motivo (detallado en observaciones)">Otro (ver observaciones)</option>
+        </select>
+      </div>
+      <div class="grid-2">
+        <div class="field"><label>Capital a devolver</label><input id="ba-capital" placeholder="Ej: $120.000 o 'a determinar'"></div>
+        <div class="field"><label>Plazo de devolución</label><input id="ba-plazo" placeholder="Ej: 30 días hábiles"></div>
+      </div>
+      <div class="field"><label>Observaciones</label><textarea id="ba-obs" style="min-height:65px" placeholder="Detalles adicionales, condiciones acordadas, etc."></textarea></div>
+      <button class="btn-submit" id="btn-baja" onclick="gen('baja')">Redactar Acta de Baja de Asociado</button>
+      <div class="result-box" id="res-baja">
+        <div class="result-header"><span class="result-label">Baja de asociado</span><button class="copy-btn" onclick="cp('body-baja')">Copiar texto</button></div>
+        <div class="result-body" id="body-baja"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ PANEL PODER ═══════════════ -->
+  <div class="panel" id="panel-poder">
+    <div class="card">
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+        Redacción de Poder
+      </div>
+      <div class="sec-divider">Cooperativa Poderdante</div>
+      <div class="grid-2">
+        <div class="field"><label>Nombre de la cooperativa</label><input id="po-coop" placeholder="Cooperativa de Trabajo ... Ltda."></div>
+        <div class="field"><label>CUIT</label><input id="po-cuit" placeholder="XX-XXXXXXXX-X"></div>
+      </div>
+      <div class="grid-2">
+        <div class="field"><label>Domicilio legal</label><input id="po-domleg" placeholder="Calle, N°, Ciudad, Provincia"></div>
+        <div class="field"><label>Fecha del poder</label><input type="date" id="po-fecha"></div>
+      </div>
+      <div class="grid-2">
+        <div class="field"><label>Cargo del firmante</label><input id="po-cargo-firmante" placeholder="Ej: Presidente"></div>
+        <div class="field"><label>Nombre del firmante</label><input id="po-firmante" placeholder="Apellido, Nombre"></div>
+      </div>
+      <div class="sec-divider">Apoderado</div>
+      <div class="grid-2">
+        <div class="field"><label>Nombre y apellido</label><input id="po-apoderado" placeholder="Apellido, Nombre"></div>
+        <div class="field"><label>DNI</label><input id="po-dni" placeholder="XX.XXX.XXX"></div>
+      </div>
+      <div class="field"><label>Domicilio del apoderado</label><input id="po-domicilio" placeholder="Calle, número, ciudad, provincia"></div>
+      <div class="sec-divider">Contenido del Poder</div>
+      <div class="field"><label>Tipo de poder</label>
+        <select id="po-tipo">
+          <option value="general amplio de administración y disposición">Poder General Amplio — Administración y Disposición</option>
+          <option value="especial para actos judiciales y extrajudiciales">Poder Especial — Judicial y Extrajudicial</option>
+          <option value="especial para gestiones bancarias y financieras">Poder Especial — Bancario y Financiero</option>
+          <option value="especial para trámites ante INAES y organismos de contralor">Poder Especial — INAES y Contralores</option>
+          <option value="especial para representación ante SECLO y MEPRE">Poder Especial — SECLO / MEPRE / Laboral</option>
+          <option value="especial para celebración y firma de contratos">Poder Especial — Contratos</option>
+          <option value="especial para gestiones impositivas y ante AFIP">Poder Especial — Impositivo / AFIP</option>
+        </select>
+      </div>
+      <div class="field"><label>Facultades específicas</label>
+        <textarea id="po-facultades" style="min-height:100px" placeholder="Detalle las facultades otorgadas: cobrar, percibir, suscribir, representar ante organismos, etc."></textarea>
+      </div>
+      <div class="grid-2">
+        <div class="field"><label>Vigencia</label><input id="po-vigencia" placeholder="Ej: por tiempo indeterminado"></div>
+        <div class="field"><label>¿Con facultad de sustitución?</label>
+          <select id="po-sustitucion">
+            <option value="sin facultad de sustitución">No — Sin facultad de sustitución</option>
+            <option value="con facultad de sustitución total o parcial">Sí — Con facultad de sustitución</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn-submit" id="btn-poder" onclick="gen('poder')">Redactar Poder</button>
+      <div class="result-box" id="res-poder">
+        <div class="result-header"><span class="result-label">Poder redactado</span><button class="copy-btn" onclick="cp('body-poder')">Copiar texto</button></div>
+        <div class="result-body" id="body-poder"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ PANEL AUTORIZACIÓN ═══════════════ -->
+  <div class="panel" id="panel-autorizacion">
+    <div class="card">
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        Acta de Autorización al Presidente para Firmar Contrato
+      </div>
+      <div class="field"><label>Nombre de la cooperativa</label><input id="au-coop" placeholder="Cooperativa de Trabajo ... Ltda."></div>
+      <div class="grid-3">
+        <div class="field"><label>Fecha de la reunión</label><input type="date" id="au-fecha"></div>
+        <div class="field"><label>N° de Acta</label><input id="au-nro" placeholder="Ej: 88"></div>
+        <div class="field"><label>Hora</label><input type="time" id="au-hora"></div>
+      </div>
+      <div class="field"><label>Consejeros presentes</label>
+        <textarea id="au-consejeros" style="min-height:65px" placeholder="Juan Pérez (Presidente), María López (Secretaria), Carlos Ruiz (Tesorero)..."></textarea>
+      </div>
+      <div class="sec-divider">Contrato a autorizar</div>
+      <div class="grid-2">
+        <div class="field"><label>Tipo de contrato</label>
+          <select id="au-tipo">
+            <option>Locación de servicios</option>
+            <option>Locación de obra</option>
+            <option>Locación de inmueble</option>
+            <option>Compraventa</option>
+            <option>Convenio de prestación de servicios</option>
+            <option>Contrato de suministro</option>
+            <option>Contrato de mutuo / préstamo</option>
+            <option>Convenio marco de colaboración</option>
+            <option>Contrato de asistencia técnica</option>
+            <option>Otro (especificar en observaciones)</option>
+          </select>
+        </div>
+        <div class="field"><label>Contraparte</label><input id="au-contraparte" placeholder="Nombre o razón social"></div>
+      </div>
+      <div class="grid-2">
+        <div class="field"><label>Objeto del contrato</label><input id="au-objeto" placeholder="Descripción del objeto"></div>
+        <div class="field"><label>Monto / Valor</label><input id="au-monto" placeholder="Ej: $500.000 o 'a convenir'"></div>
+      </div>
+      <div class="grid-2">
+        <div class="field"><label>Plazo / Vigencia</label><input id="au-plazo" placeholder="Ej: 12 meses desde la firma"></div>
+        <div class="field"><label>Presidente autorizado</label><input id="au-presidente" placeholder="Apellido, Nombre"></div>
+      </div>
+      <div class="field"><label>Condiciones e instrucciones del Consejo</label>
+        <textarea id="au-obs" style="min-height:80px" placeholder="Condiciones especiales, restricciones, instrucciones del consejo al presidente..."></textarea>
+      </div>
+      <button class="btn-submit" id="btn-autorizacion" onclick="gen('autorizacion')">Redactar Acta de Autorización</button>
+      <div class="result-box" id="res-autorizacion">
+        <div class="result-header"><span class="result-label">Acta de autorización</span><button class="copy-btn" onclick="cp('body-autorizacion')">Copiar texto</button></div>
+        <div class="result-body" id="body-autorizacion"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ PANEL ANÁLISIS ═══════════════ -->
+  <div class="panel" id="panel-analisis">
+    <div class="card">
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Análisis de Contratos
+      </div>
+      <div class="field"><label>Texto del contrato a analizar</label>
+        <textarea id="an-texto" style="min-height:180px" placeholder="Pegue aquí el texto completo del contrato..."></textarea>
+      </div>
+      <div class="grid-2">
+        <div class="field"><label>Tipo de análisis</label>
+          <select id="an-tipo">
+            <option value="integral">Análisis integral — Cláusulas, riesgos y recomendaciones</option>
+            <option value="laboral">Relación laboral / Cooperativa (Ley 20.337 vs Ley 24.013)</option>
+            <option value="riesgos">Cláusulas riesgosas o abusivas</option>
+            <option value="rescision">Rescisión, resolución y extinción</option>
+            <option value="obligaciones">Obligaciones y derechos de las partes</option>
+            <option value="inaes">Conformidad con normativa INAES y contralores provinciales</option>
+          </select>
+        </div>
+        <div class="field"><label>Tipo de contrato</label>
+          <select id="an-tcontrato">
+            <option>Contrato comercial / servicios</option>
+            <option>Contrato de trabajo / servicio cooperativo</option>
+            <option>Contrato de locación</option>
+            <option>Convenio interinstitucional</option>
+            <option>Contrato de compraventa</option>
+            <option>Otro</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn-submit" id="btn-analisis" onclick="gen('analisis')">Analizar Contrato</button>
+      <div class="result-box" id="res-analisis">
+        <div class="result-header"><span class="result-label">Análisis legal</span><button class="copy-btn" onclick="cp('body-analisis')">Copiar texto</button></div>
+        <div class="result-body" id="body-analisis"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ PANEL CONSULTA ═══════════════ -->
+  <div class="panel" id="panel-consulta">
+    <div class="card">
+      <div class="card-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Consulta Legal Cooperativa
+      </div>
+      <div class="field"><label>Su consulta</label>
+        <textarea id="co-texto" style="min-height:150px" placeholder="Ej: ¿Puede un asociado reclamar una relación laboral ante el SECLO? ¿Qué quórum requiere la Ley 20.337 para una asamblea extraordinaria? ¿Qué resoluciones del INAES regulan la integración de capital? ¿Cómo procede la exclusión de un asociado?"></textarea>
+      </div>
+      <div class="field"><label>Área temática</label>
+        <select id="co-area">
+          <option>Derecho cooperativo general — Ley 20.337</option>
+          <option>INAES — Resoluciones e inscripciones</option>
+          <option>Órganos de contralor provinciales</option>
+          <option>Derecho laboral y cooperativas — Ley 24.013</option>
+          <option>Asambleas y gobierno cooperativo</option>
+          <option>SECLO / MEPRE / Conciliación laboral — Ley 26.589</option>
+          <option>Contratos y relaciones comerciales</option>
+          <option>Aspectos impositivos — AFIP / ARCA</option>
+          <option>Estatuto y reformas estatutarias</option>
+        </select>
+      </div>
+      <button class="btn-submit" id="btn-consulta" onclick="gen('consulta')">Consultar al Asistente Legal</button>
+      <div class="result-box" id="res-consulta">
+        <div class="result-header"><span class="result-label">Respuesta legal</span><button class="copy-btn" onclick="cp('body-consulta')">Copiar texto</button></div>
+        <div class="result-body" id="body-consulta"></div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <strong>ZAFÁ LEGAL</strong> · Asistente jurídico para cooperativas · Ley 20.337 · INAES · Contralores Provinciales<br>
+  <span style="opacity:0.5;font-size:10px;margin-top:4px;display:block">Los documentos generados tienen carácter orientativo. Consulte siempre con un profesional habilitado.</span>
+</footer>
+
+<script>
+const TABS = ['asamblea','consejo','cargos','alta','baja','poder','autorizacion','analisis','consulta'];
+
+function sw(id, el) {
+  TABS.forEach(t => {
+    document.getElementById('panel-'+t).classList.remove('active');
+  });
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  el.classList.add('active');
+}
+
+function addRow(containerId) {
+  const d = document.createElement('div');
+  d.className = 'cargo-row';
+  d.innerHTML = '<input placeholder="Cargo" style="font-size:13px"><input placeholder="Nombre y apellido completo" style="font-size:13px"><button class="rm-btn" onclick="this.parentElement.remove()">×</button>';
+  document.getElementById(containerId).appendChild(d);
+}
+
+function v(id) { const el = document.getElementById(id); return el ? el.value.trim() : ''; }
+
+function getRows(containerId) {
+  return Array.from(document.querySelectorAll('#'+containerId+' .cargo-row'))
+    .map(r => { const ins = r.querySelectorAll('input'); return (ins[0].value && ins[1].value) ? ins[0].value+': '+ins[1].value : null; })
+    .filter(Boolean).join('\n');
+}
+
+function setLoad(id, on) {
+  const b = document.getElementById('btn-'+id);
+  const labels = {
+    asamblea:'Redactar Acta de Asamblea',
+    consejo:'Redactar Acta del Consejo',
+    cargos:'Redactar Acta de Distribución de Cargos',
+    alta:'Redactar Acta de Alta de Asociado',
+    baja:'Redactar Acta de Baja de Asociado',
+    poder:'Redactar Poder',
+    autorizacion:'Redactar Acta de Autorización',
+    analisis:'Analizar Contrato',
+    consulta:'Consultar al Asistente Legal'
+  };
+  b.disabled = on;
+  b.innerHTML = on ? '<span class="spin"></span>Procesando...' : labels[id];
+}
+
+function showResult(id, texto) {
+  const r = document.getElementById('res-'+id);
+  r.classList.add('on');
+  const el = document.getElementById('body-'+id);
+  el.textContent = '';
+  let i = 0;
+  const iv = setInterval(() => {
+    el.textContent += texto[i++];
+    if (i >= texto.length) clearInterval(iv);
+  }, 6);
+  setTimeout(() => r.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+}
+
+function cp(id) {
+  const t = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(t).then(() => {
+    const btn = event.target;
+    btn.textContent = '¡Copiado!';
+    setTimeout(() => btn.textContent = 'Copiar texto', 2000);
+  }).catch(() => {});
+}
+
+const SYS = `Sos un abogado especialista en derecho cooperativo argentino con más de 20 años de experiencia. Tenés dominio completo de:
+- Ley 20.337 (Cooperativas) y toda su reglamentación
+- Resoluciones del INAES (Instituto Nacional de Asociativismo y Economía Social) y sus circulares
+- Normativa de órganos de contralor provinciales (INAES provincial, DPPJ, etc.)
+- Ley 24.013 (Empleo), Ley 26.844, Ley 24.635, Ley 26.589
+- Código Civil y Comercial de la Nación (arts. 1442 y siguientes sobre asociaciones y cooperativas)
+- Jurisprudencia laboral sobre relación asociativa vs. dependencia
+- Procedimientos ante SECLO y MEPRE
+
+Redactás documentos jurídicos formales, completos y en lenguaje técnico-jurídico preciso argentino, en texto plano sin markdown, sin asteriscos, sin guiones como listas. Cada documento incluye todos los elementos jurídicamente necesarios y está listo para su uso real o presentación ante organismos. Usás siempre terminología legal argentina correcta.`;
+
+async function callAI(prompt) {
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      system: SYS,
+      messages: [{ role: 'user', content: prompt }]
+    })
+  });
+  const d = await res.json();
+  return d.content?.map(b => b.text || '').join('') || 'No se pudo obtener respuesta.';
+}
+
+async function gen(id) {
+  setLoad(id, true);
+  let prompt = '';
+
+  try {
+    if (id === 'asamblea') {
+      prompt = `Redactá el acta completa de la siguiente reunión cooperativa:
+Tipo: ${v('a-tipo')}
+Cooperativa: ${v('a-coop') || 'la cooperativa'}
+N° de Acta: ${v('a-nro') || '___'}
+Fecha: ${v('a-fecha')}
+Lugar: ${v('a-lugar') || 'sede social'}
+Hora de inicio: ${v('a-hora') || 's/d'}
+Quórum / Asociados presentes: ${v('a-quorum') || 'quórum reglamentario'}
+Orden del día: ${v('a-orden') || 'a detallar'}
+Resoluciones y deliberaciones: ${v('a-resoluciones') || 'ninguna especificada'}
+Presidente de mesa: ${v('a-pres') || '___'}
+Secretario de mesa: ${v('a-sec') || '___'}
+
+El acta debe incluir: encabezado formal con todos los datos, verificación del quórum conforme Ley 20.337, apertura formal, desarrollo punto por punto del orden del día con deliberaciones, resultado de votaciones, resoluciones adoptadas, cierre, hora de finalización, y espacio para firmas del presidente y secretario de mesa. Hacé referencia a los artículos pertinentes de la Ley 20.337 cuando corresponda.`;
+
+    } else if (id === 'consejo') {
+      prompt = `Redactá el acta formal y completa de la siguiente reunión del Consejo de Administración:
+Tipo: ${v('c-tipo')}
+Cooperativa: ${v('c-coop') || 'la cooperativa'}
+N° de Acta: ${v('c-nro') || '___'}
+Fecha: ${v('c-fecha')}
+Lugar: ${v('c-lugar') || 'sede social'}
+Hora: ${v('c-hora') || 's/d'}
+Consejeros presentes: ${v('c-consejeros') || 'los miembros del consejo'}
+Orden del día: ${v('c-orden') || 'a detallar'}
+Temas y resoluciones: ${v('c-resoluciones') || 'a detallar'}
+
+El acta debe incluir: encabezado formal, verificación del quórum estatutario del consejo conforme Ley 20.337 art. 66, designación del presidente y secretario de la reunión, desarrollo punto por punto, resoluciones con resultado de votación, cierre con hora de finalización y firmas de todos los consejeros presentes.`;
+
+    } else if (id === 'cargos') {
+      prompt = `Redactá el acta de distribución de cargos del Consejo de Administración:
+Cooperativa: ${v('car-coop') || 'la cooperativa'}
+Fecha: ${v('car-fecha')}
+Período: ${v('car-periodo') || 'ejercicio vigente'}
+
+Cargos del Consejo de Administración:
+${getRows('cargos-ca') || '(no especificados)'}
+
+Sindicatura / Revisores de cuentas:
+${getRows('cargos-sind') || '(no especificados)'}
+
+Observaciones: ${v('car-obs') || 'ninguna'}
+
+El acta debe incluir: encabezado formal, contexto de la reunión de constitución post-asamblea, referencia a la elección realizada en asamblea (art. 63 Ley 20.337), aceptación expresa de cada cargo por parte del designado, declaración de constitución del consejo, asunción de funciones y responsabilidades, registro en libro de actas del consejo, y espacio para firmas de todos los miembros.`;
+
+    } else if (id === 'alta') {
+      prompt = `Redactá el acta de alta e incorporación de nuevo asociado a la cooperativa:
+Cooperativa: ${v('al-coop') || 'la cooperativa'}
+N° de Acta: ${v('al-nro') || '___'}
+Fecha: ${v('al-fecha')}
+Nuevo asociado: ${v('al-nombre') || '___'}
+DNI: ${v('al-dni') || '___'}
+Domicilio: ${v('al-domicilio') || '___'}
+Fecha de nacimiento: ${v('al-nacimiento') || '___'}
+Cuota social: ${v('al-cuota') || '___'}
+Sector/área: ${v('al-sector') || '___'}
+N° de registro en libro de asociados: ${v('al-registro') || '___'}
+Observaciones: ${v('al-obs') || 'ninguna'}
+
+El acta debe incluir: encabezado formal, presentación de la solicitud de ingreso, verificación del cumplimiento de requisitos estatutarios y legales (arts. 17 a 24 Ley 20.337), resolución aprobatoria del Consejo de Administración con resultado de votación, número de registro asignado en el libro de asociados, derechos y obligaciones del nuevo asociado conforme estatuto y Ley 20.337, notificación al nuevo asociado, y espacio para firmas.`;
+
+    } else if (id === 'baja') {
+      prompt = `Redactá el acta de baja de asociado de la cooperativa:
+Cooperativa: ${v('ba-coop') || 'la cooperativa'}
+N° de Acta: ${v('ba-nro') || '___'}
+Fecha: ${v('ba-fecha')}
+Asociado: ${v('ba-nombre') || '___'}
+DNI: ${v('ba-dni') || '___'}
+Fecha de ingreso: ${v('ba-ingreso') || '___'}
+Fecha efectiva de baja: ${v('ba-egreso') || '___'}
+Motivo: ${v('ba-motivo')}
+Capital a devolver: ${v('ba-capital') || 'a determinar'}
+Plazo de devolución: ${v('ba-plazo') || 'según estatuto'}
+Observaciones: ${v('ba-obs') || 'ninguna'}
+
+El acta debe incluir: encabezado formal, antecedentes del asociado (tiempo de membresía, cuota integrada), causa de la baja con fundamento en los artículos pertinentes de la Ley 20.337 (arts. 22, 23 o 30 según motivo), resolución del Consejo de Administración, procedimiento de devolución del capital suscripto e integrado conforme art. 32 Ley 20.337, baja en el libro de asociados con número de registro, y espacio para firmas.`;
+
+    } else if (id === 'poder') {
+      prompt = `Redactá un poder formal completo otorgado por la cooperativa a un apoderado:
+Cooperativa poderdante: ${v('po-coop') || 'la cooperativa'}
+CUIT: ${v('po-cuit') || '___'}
+Domicilio legal: ${v('po-domleg') || '___'}
+Cargo del firmante: ${v('po-cargo-firmante') || 'Presidente'}
+Nombre del firmante: ${v('po-firmante') || '___'}
+Fecha: ${v('po-fecha')}
+Apoderado: ${v('po-apoderado') || '___'}
+DNI del apoderado: ${v('po-dni') || '___'}
+Domicilio del apoderado: ${v('po-domicilio') || '___'}
+Tipo de poder: ${v('po-tipo')}
+Facultades específicas: ${v('po-facultades') || 'las propias del tipo de poder'}
+Vigencia: ${v('po-vigencia') || 'por tiempo indeterminado'}
+Sustitución: ${v('po-sustitucion')}
+
+El poder debe incluir: identificación completa de las partes, acreditación de la personería del firmante con referencia al estatuto social y acta de designación de autoridades inscriptos ante el INAES, CUIT de la cooperativa, facultades detalladas y específicas, cláusula de responsabilidad, facultad de sustitución si corresponde, aceptación expresa del apoderado, lugar para certificación notarial y/o legalización. Redactalo en la forma jurídica argentina habitual para poderes societarios.`;
+
+    } else if (id === 'autorizacion') {
+      prompt = `Redactá el acta del Consejo de Administración mediante la cual se autoriza al Presidente a celebrar y firmar un contrato en nombre de la cooperativa:
+Cooperativa: ${v('au-coop') || 'la cooperativa'}
+N° de Acta: ${v('au-nro') || '___'}
+Fecha: ${v('au-fecha')}
+Hora: ${v('au-hora') || 's/d'}
+Consejeros presentes: ${v('au-consejeros') || 'los miembros del consejo'}
+Tipo de contrato: ${v('au-tipo')}
+Contraparte: ${v('au-contraparte') || '___'}
+Objeto del contrato: ${v('au-objeto') || '___'}
+Monto: ${v('au-monto') || '___'}
+Plazo: ${v('au-plazo') || '___'}
+Presidente autorizado a firmar: ${v('au-presidente') || 'el Presidente'}
+Condiciones e instrucciones del Consejo: ${v('au-obs') || 'ninguna'}
+
+El acta debe incluir: encabezado formal, verificación del quórum del Consejo, presentación y análisis del contrato por parte del consejo, deliberación y debate, resolución formal autorizando expresamente al Presidente a suscribir el contrato en nombre y representación de la cooperativa con todas las facultades necesarias (art. 72 Ley 20.337), condiciones especiales o instrucciones si las hubiera, y firmas de todos los consejeros presentes.`;
+
+    } else if (id === 'analisis') {
+      const tipos = {
+        integral: 'Realizá un análisis legal integral del contrato: identificá las partes y su capacidad, el objeto, cláusulas principales, derechos y obligaciones, plazos, condiciones de rescisión, cláusulas riesgosas o abusivas conforme CCyC, y formulá recomendaciones concretas.',
+        laboral: 'Analizá el contrato desde la perspectiva del derecho cooperativo y laboral argentino (Ley 20.337 y Ley 24.013). ¿Existe riesgo de que se configure una relación de dependencia laboral? ¿Qué elementos del contrato refuerzan o debilitan el vínculo asociativo cooperativo? Citá jurisprudencia relevante si corresponde.',
+        riesgos: 'Identificá todas las cláusulas potencialmente riesgosas, abusivas, leoninas o nulas de pleno derecho según el derecho argentino (CCyC arts. 988, 989, 1119 y ss.). Explicá el riesgo concreto de cada una y proponé redacciones alternativas.',
+        rescision: 'Analizá en detalle todas las cláusulas relacionadas con rescisión, resolución, extinción, resolución anticipada, penalidades, cláusulas penales y preaviso. ¿Son proporcionales? ¿Generan riesgos para la cooperativa?',
+        obligaciones: 'Identificá y explicá con claridad todas las obligaciones y derechos de cada parte contratante. ¿Existe equilibrio entre las prestaciones? ¿Hay obligaciones desproporcionadas?',
+        inaes: 'Analizá si el contrato cumple con la normativa del INAES, la Ley 20.337 y las resoluciones de los órganos de contralor provinciales. ¿Requiere aprobación asamblearia? ¿Existen restricciones legales para este tipo de contratación por parte de la cooperativa?'
+      };
+      prompt = `CONTRATO A ANALIZAR (tipo: ${v('an-tcontrato')}):\n${v('an-texto') || '(sin texto)'}\n\n${tipos[v('an-tipo')] || tipos.integral}`;
+
+    } else if (id === 'consulta') {
+      prompt = `Área: ${v('co-area')}\n\nConsulta: ${v('co-texto') || '(sin consulta)'}`;
+    }
+
+    const txt = await callAI(prompt);
+    showResult(id, txt);
+  } catch (e) {
+    showResult(id, 'Error al conectar con la IA. Verifique su conexión a internet.');
+  }
+  setLoad(id, false);
+}
+
+// Set today's date on all date inputs
+document.querySelectorAll('input[type=date]').forEach(i => {
+  try { i.valueAsDate = new Date(); } catch(e) {}
+});
+</script>
+</body>
+</html>
